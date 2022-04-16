@@ -286,18 +286,39 @@ void mostrarCarritos(Map* carritos)
   }
   carrito* tmp = (carrito*) calloc (1, sizeof(carrito));
   int totalProductos = 0;
-  
+  char tmpNombre[100];
   while (lista != NULL)
   {
     tmp = (carrito*) firstList(lista);
     totalProductos = 0;
-    while (tmp != NULL)
+    if (tmp == NULL)
     {
-      totalProductos = totalProductos + tmp->cantidad;
-      tmp = (carrito*) nextList(lista);
+      printf("No hay ningun producto en el carrito : \n");
     }
-    printf("%s, cantidad de productos: %d\n", tmp->nombreCarrito, totalProductos);
+    else
+    {
+      strcpy(tmpNombre, tmp->nombreCarrito);
+      while (tmp != NULL)
+      {
+        totalProductos = totalProductos + tmp->cantidad;
+        tmp = (carrito*) nextList(lista);
+      }
+      printf("%s, cantidad de productos: %d\n", tmpNombre, totalProductos);
+    }
     lista = (List*)nextMap(carritos);
+  }
+}
+
+void eliminarProductoCarrito(Map* carritos, char* nombreCarrito)
+{
+  List* lista = (List*)searchMap(carritos, nombreCarrito);
+  if (lista == NULL)
+  {
+    printf("No existe ningun carrito con este nombre\n");
+  }
+  else
+  {
+    lista = popBack(lista);
   }
 }
 
@@ -375,6 +396,10 @@ void menu(Map* mapaTipo, Map* mapaNombre, Map* mapaMarca, Map* carritos)
       }
       case 9:
       {
+        char* nombreCarrito;
+        printf("Ingrese el nombre del carrito:\n");
+        leerChar(&nombreCarrito);
+        eliminarProductoCarrito(carritos, nombreCarrito);
         break;
       }
       case 10:
