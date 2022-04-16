@@ -51,7 +51,6 @@ void aumentar_o_Agregar (Map* mapa, char* clave, producto* tmpProducto)
     {
       if (strcmp(tmpProducto->nombre, tmp->nombre) == 0)
       {
-        tmp->stock = tmp->stock + tmpProducto->stock;
         return;
       }
       tmp = (producto*) nextList(lista);
