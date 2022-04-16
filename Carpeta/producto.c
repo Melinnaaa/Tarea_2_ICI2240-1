@@ -232,7 +232,76 @@ void agregarProducto(Map* mapaMarca, Map* mapaNombre, Map* mapaTipo, producto* t
     }  
 }
 
-void menu(Map* mapaTipo, Map* mapaNombre, Map* mapaMarca)
+carrito* createShoppingCart()
+{
+  carrito* cart = (carrito*) calloc (1, sizeof(carrito));
+  printf("Ingrese el nombre del producto\n");
+  scanf("%[^\n]s", cart->nombreProducto);
+  getchar();
+  printf("Ingrese la cantidad de articulos\n");
+  scanf("%d", &cart->cantidad);
+  getchar();
+  printf("Ingrese el nombre del carrito\n");
+  scanf("%[^\n]s", cart->nombreCarrito);
+  getchar();
+  return cart;
+}
+
+void asignarCarrito(carrito* cart, Map* carritos)
+{
+  if (searchMap(carritos, cart->nombreCarrito) == NULL) 
+  {
+    List* lista = createList(); 
+    insertMap(carritos, cart->nombreCarrito, lista);
+    pushFront (lista, cart);
+  }
+  else
+  {
+    List* lista = (List*)searchMap(carritos, cart->nombreCarrito);
+    carrito* tmp = (carrito*) calloc (1, sizeof(carrito));
+    tmp = (carrito*) firstList(lista);
+    while (tmp != NULL)
+    {
+      if (strcmp(cart->nombreProducto, tmp->nombreProducto) == 0)
+      {
+        tmp->cantidad = tmp->cantidad + cart->cantidad;
+        return;
+      }
+      tmp = (carrito*) nextList(lista);
+    }
+    if (tmp == NULL) // Si el producto ingresado no existe se agrega a la lista
+    {
+      pushBack (lista, cart);
+    }
+  }
+}
+
+void mostrarCarritos(Map* carritos)
+{
+  List* lista = (List*)firstMap(carritos);
+  if (lista == NULL)
+  {
+    printf ("No existe ningun carrito\n");
+    return;
+  }
+  carrito* tmp = (carrito*) calloc (1, sizeof(carrito));
+  int totalProductos = 0;
+  
+  while (lista != NULL)
+  {
+    tmp = (carrito*) firstList(lista);
+    totalProductos = 0;
+    while (tmp != NULL)
+    {
+      totalProductos = totalProductos + tmp->cantidad;
+      tmp = (carrito*) nextList(lista);
+    }
+    printf("%s, cantidad de productos: %d\n", tmp->nombreCarrito, totalProductos);
+    lista = (List*)nextMap(carritos);
+  }
+}
+
+void menu(Map* mapaTipo, Map* mapaNombre, Map* mapaMarca, Map* carritos)
 {
   int opcion;// Almacena la opcion ingresada por el usuario
   while(1)
@@ -300,7 +369,8 @@ void menu(Map* mapaTipo, Map* mapaNombre, Map* mapaMarca)
       }
       case 8:
       {
-        
+        carrito* cart = createShoppingCart();
+        asignarCarrito(cart, carritos);
         break;
       }
       case 9:
@@ -313,7 +383,7 @@ void menu(Map* mapaTipo, Map* mapaNombre, Map* mapaMarca)
       }
       case 11:
       {
-        
+        mostrarCarritos(carritos);
         break;
       }
       case 12:

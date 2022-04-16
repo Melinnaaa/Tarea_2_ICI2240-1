@@ -22,6 +22,8 @@ int main (void)
     setSortFunction(mapaNombre,lower_than_string);
     Map* mapaMarca = createMap(is_equal_string);
     setSortFunction(mapaMarca,lower_than_string);
-    menu(mapaTipo, mapaNombre, mapaMarca);
+    Map* carritos = createMap(is_equal_string);
+    setSortFunction(carritos,lower_than_string);
+    menu(mapaTipo, mapaNombre, mapaMarca, carritos);
     return (0);
 }
