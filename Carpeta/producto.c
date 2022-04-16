@@ -17,19 +17,6 @@ void leerChar (char** nombreArchivo)
   strcpy((*nombreArchivo), buffer);
 }
 
-void* concat(producto* tmpProducto)
-{
-  char delimitar[] = " "; //Se separan cuando se encuentre un espacio
-  char tmpNombre[100];
-  strcpy (tmpNombre, tmpProducto->nombre);
-  char* tmp = strtok(tmpNombre, delimitar);
-  while (tmp != NULL)
-  {
-    strcat(tmpProducto->claveNombre, tmp);
-    tmp = strtok(NULL, delimitar);    
-  }  
-}
-
 void imprimirOpcionesMenu()
 {
   printf("1.- Importar Productos.\n");
@@ -79,7 +66,7 @@ void aumentar_o_Agregar (Map* mapa, char* clave, producto* tmpProducto)
 void aumentarStock(Map* mapa, producto* clave)
 {
   producto* tmp = (producto*) calloc (1, sizeof(producto));
-  tmp = (producto*)searchMap(mapa, clave->claveNombre);
+  tmp = (producto*)searchMap(mapa, clave->nombre);
   if (tmp != NULL)
   {
     tmp->stock = tmp->stock + clave->stock;
@@ -172,11 +159,10 @@ void importarProductos(char* nombreArchivo, Map* mapaNombre, Map* mapaMarca, Map
         }
       }
     }
-    concat(tmpProducto);
     //Se comprueba si ya existe un producto con ese nombre en el mapa, ya que el nombre es unico.
-    if (searchMap(mapaNombre, tmpProducto->claveNombre) == NULL)
+    if (searchMap(mapaNombre, tmpProducto->nombre) == NULL)
     {
-      insertMap(mapaNombre, tmpProducto->claveNombre, tmpProducto);
+      insertMap(mapaNombre, tmpProducto->nombre, tmpProducto);
       aumentar_o_Agregar (mapaMarca, tmpProducto->marca, tmpProducto);
       aumentar_o_Agregar (mapaTipo, tmpProducto->tipo, tmpProducto);
     } 
