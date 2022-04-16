@@ -12,6 +12,7 @@ typedef struct producto producto;
 struct producto
 {
   char nombre[100]; // Almacena el nombre del producto
+  char claveNombre[100]; // Almacena el nombre concatenado
   char marca[100]; // Almacena la marca del producto
   char tipo[100]; // Almacena el tipo del producto
   int stock; // Almacena el stock del producto
@@ -29,8 +30,6 @@ void aumentarStock(Map* mapa, producto* clave);
 producto* createProd();
 
 void exportarCanciones(Map* map, char* nombreArchivo);
-
-int comprobarSiEsta(Map* map, char* clave);
 
 void importarProductos(char* nombreArchivo, Map* mapaNombre, Map* mapaMarca, Map* mapaTipo);
 
