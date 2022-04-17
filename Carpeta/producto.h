@@ -37,9 +37,7 @@ void aumentarStock(Map* mapa, producto* clave);
 
 producto* createProd();
 
-char* reservarMemoria (int largo);
-
-void exportarCanciones(Map* map, char* nombreArchivo);
+void exportarProductos(Map* map, char* nombreArchivo);
 
 void importarProductos(char* nombreArchivo, Map* mapaNombre, Map* mapaMarca, Map* mapaTipo);
 
@@ -56,6 +54,10 @@ carrito* createShoppingCart();
 void asignarCarrito(carrito* cart, Map* carritos, Map* mapaNombre, List* nombreCarritos);
 
 void mostrarCarritos(Map* carritos, List* nombreCarritos);
+
+void eliminarProductoCarrito(Map* carritos, char* nombreCarrito);
+
+void concretarCompra(Map* carritos, char* nombreCarrito, Map* mapaNombre);
 
 void menu(Map* mapaTipo, Map* mapaNombre, Map* mapaMarca, Map* carritos);
 

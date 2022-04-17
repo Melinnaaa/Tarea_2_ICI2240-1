@@ -93,13 +93,7 @@ producto* createProd()
   return tmp;
 }
 
-char* reservarMemoria (int largo)
-{
-  char* tmp = (char*) calloc (largo, sizeof(char));
-  return tmp;
-}
-
-void exportarCanciones(Map* map, char* nombreArchivo)
+void exportarProductos(Map* map, char* nombreArchivo)
 {
   FILE* archivo = fopen (nombreArchivo, "a");//Se abre en modo "append", el cual escribe al final del archivo si existe o crea uno si no existe.
   producto* tmp = (producto*)firstMap(map);
@@ -404,9 +398,9 @@ void menu(Map* mapaTipo, Map* mapaNombre, Map* mapaMarca, Map* carritos)
       case 2:
       {
         char* archivoExportar;
-        printf("Ingrese el nombre del archivo al que desea importar las cacniones\n");
+        printf("Ingrese el nombre del archivo al que desea importar los productos\n");
         leerChar(&archivoExportar);
-        exportarCanciones(mapaNombre, archivoExportar);
+        exportarProductos(mapaNombre, archivoExportar);
         break;
       }
       case 3:
