@@ -251,7 +251,7 @@ carrito* createShoppingCart()
   return cart;
 }
 
-void asignarCarrito(carrito* cart, Map* carritos, Map* mapaNombre)
+void asignarCarrito(carrito* cart, Map* carritos, Map* mapaNombre, List* nombreCarritos)
 {
   if (searchMap(mapaNombre, cart->nombreProducto) == NULL)
   {
@@ -263,6 +263,7 @@ void asignarCarrito(carrito* cart, Map* carritos, Map* mapaNombre)
     List* lista = createList(); 
     insertMap(carritos, cart->nombreCarrito, lista);
     pushFront (lista, cart);
+    pushBack(nombreCarritos, cart->nombreCarrito);
   }
   else
   {
@@ -285,7 +286,7 @@ void asignarCarrito(carrito* cart, Map* carritos, Map* mapaNombre)
   }
 }
 
-void mostrarCarritos(Map* carritos)
+void mostrarCarritos(Map* carritos, List* nombreCarritos)
 {
   List* lista = (List*)firstMap(carritos);
   if (lista == NULL)
@@ -296,17 +297,17 @@ void mostrarCarritos(Map* carritos)
   carrito* tmp = (carrito*) calloc (1, sizeof(carrito));
   int totalProductos = 0;
   char tmpNombre[100];
+  strcpy(tmpNombre, firstList(nombreCarritos));
   while (lista != NULL)
   {
     tmp = (carrito*) firstList(lista);
     totalProductos = 0;
     if (tmp == NULL)
     {
-      printf("No hay ningun producto en el carrito : \n");
+      printf("No hay ningun producto en el carrito: %s\n", tmpNombre);
     }
     else
     {
-      strcpy(tmpNombre, tmp->nombreCarrito);
       while (tmp != NULL)
       {
         totalProductos = totalProductos + tmp->cantidad;
@@ -315,6 +316,10 @@ void mostrarCarritos(Map* carritos)
       printf("Carrito: %s, cantidad de productos: %d\n", tmpNombre, totalProductos);
     }
     lista = (List*)nextMap(carritos);
+    if (lista != NULL)
+    {
+      strcpy(tmpNombre, nextList(nombreCarritos));
+    }
   }
 }
 
@@ -376,6 +381,7 @@ void concretarCompra(Map* carritos, char* nombreCarrito, Map* mapaNombre)
 void menu(Map* mapaTipo, Map* mapaNombre, Map* mapaMarca, Map* carritos)
 {
   int opcion;// Almacena la opcion ingresada por el usuario
+  List* nombreCarritos = createList();
   while(1)
   {
     do
@@ -442,7 +448,7 @@ void menu(Map* mapaTipo, Map* mapaNombre, Map* mapaMarca, Map* carritos)
       case 8:
       {
         carrito* cart = createShoppingCart();
-        asignarCarrito(cart, carritos, mapaNombre);
+        asignarCarrito(cart, carritos, mapaNombre, nombreCarritos);
         break;
       }
       case 9:
@@ -463,12 +469,12 @@ void menu(Map* mapaTipo, Map* mapaNombre, Map* mapaMarca, Map* carritos)
       }
       case 11:
       {
-        mostrarCarritos(carritos);
+        mostrarCarritos(carritos, nombreCarritos);
         break;
       }
       case 12:
       {
-        printf("Gracias por utilizar el programa\n");
+        printf("Gracias por utilizar el programa!\n");
         return;
       }
     }
@@ -481,7 +487,7 @@ void menu(Map* mapaTipo, Map* mapaNombre, Map* mapaMarca, Map* carritos)
     } while (opcion < 1 || opcion > 2);
     if (opcion == 2)
     {
-      printf("Gracias por utilizar el programa\n");
+      printf("Gracias por utilizar el programa!\n");
       break;
     }
   }

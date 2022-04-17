@@ -53,9 +53,9 @@ void agregarProducto(Map* mapaMarca, Map* mapaNombre, Map* mapaTipo, producto* t
 
 carrito* createShoppingCart();
 
-void asignarCarrito(carrito* cart, Map* carritos, Map* mapaNombre);
+void asignarCarrito(carrito* cart, Map* carritos, Map* mapaNombre, List* nombreCarritos);
 
-void mostrarCarritos(Map* carritos);
+void mostrarCarritos(Map* carritos, List* nombreCarritos);
 
 void menu(Map* mapaTipo, Map* mapaNombre, Map* mapaMarca, Map* carritos);
 
