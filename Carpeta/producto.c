@@ -209,6 +209,10 @@ void mostrarTodos(Map* mapaNombre)
 {
   producto* tmp = (producto*) calloc (1, sizeof(producto));
   tmp = (producto*) firstMap(mapaNombre);
+  if (tmp == NULL)
+  {
+    printf("No existe ningun producto\n");
+  }
   while (tmp != NULL)
   {
     printf ("%s, %s, %s, %d, %d\n", tmp->nombre, tmp->marca, tmp->tipo, tmp->stock, tmp->precio);
@@ -247,8 +251,13 @@ carrito* createShoppingCart()
   return cart;
 }
 
-void asignarCarrito(carrito* cart, Map* carritos)
+void asignarCarrito(carrito* cart, Map* carritos, Map* mapaNombre)
 {
+  if (searchMap(mapaNombre, cart->nombreProducto) == NULL)
+  {
+    printf("El producto que desea agregar no existe\n");
+    return;
+  }
   if (searchMap(carritos, cart->nombreCarrito) == NULL) 
   {
     List* lista = createList(); 
@@ -303,7 +312,7 @@ void mostrarCarritos(Map* carritos)
         totalProductos = totalProductos + tmp->cantidad;
         tmp = (carrito*) nextList(lista);
       }
-      printf("%s, cantidad de productos: %d\n", tmpNombre, totalProductos);
+      printf("Carrito: %s, cantidad de productos: %d\n", tmpNombre, totalProductos);
     }
     lista = (List*)nextMap(carritos);
   }
@@ -320,6 +329,48 @@ void eliminarProductoCarrito(Map* carritos, char* nombreCarrito)
   {
     lista = popBack(lista);
   }
+}
+
+void concretarCompra(Map* carritos, char* nombreCarrito, Map* mapaNombre)
+{
+  List* lista = (List*)searchMap(carritos, nombreCarrito);
+  if (lista == NULL)
+  {
+    printf ("El carrito no existe.\n");
+    return;
+  }
+  carrito* tmp = (carrito*) calloc (1, sizeof(carrito));
+  tmp = (carrito*) firstList(lista);
+  if (tmp == NULL)
+  {
+    printf ("El carrito no tiene ningun producto.\n");
+    return;
+  }
+  producto* tmpStock = (producto*) calloc (1, sizeof(producto));
+  int total;
+  int precio = 0;
+  printf("Resumen de compra:\n");
+  while (tmp != NULL)
+  {
+    tmpStock = (producto*)searchMap(mapaNombre, tmp->nombreProducto);
+    if (tmpStock->stock <  tmp->cantidad)
+    {
+      total = tmpStock->stock * tmpStock->precio;
+      precio = precio + total;
+      printf ("%s, %d\n", tmp->nombreProducto, tmpStock->stock);
+      tmpStock->stock = 0;
+    }
+    else
+    {
+      total = tmp->cantidad * tmpStock->precio;
+      precio = precio + total;
+      tmpStock->stock = tmpStock->stock - tmp->cantidad;
+      printf ("%s, %d\n", tmp->nombreProducto, tmp->cantidad);
+    }
+    tmp = (carrito*) nextList(lista);
+  }
+  printf("El total a pagar es : $%d\n", precio);
+  eraseMap(carritos, nombreCarrito);
 }
 
 void menu(Map* mapaTipo, Map* mapaNombre, Map* mapaMarca, Map* carritos)
@@ -391,7 +442,7 @@ void menu(Map* mapaTipo, Map* mapaNombre, Map* mapaMarca, Map* carritos)
       case 8:
       {
         carrito* cart = createShoppingCart();
-        asignarCarrito(cart, carritos);
+        asignarCarrito(cart, carritos, mapaNombre);
         break;
       }
       case 9:
@@ -404,6 +455,10 @@ void menu(Map* mapaTipo, Map* mapaNombre, Map* mapaMarca, Map* carritos)
       }
       case 10:
       {
+        char* nombreCarrito;
+        printf("Ingrese el nombre del carrito:\n");
+        leerChar(&nombreCarrito);
+        concretarCompra(carritos, nombreCarrito, mapaNombre);
         break;
       }
       case 11:
