@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "list.h"
 
 //Funcion para leer el k-esimo elemento de un string (separado por comas)
 const char *get_csv_field (char * tmp, int k) {
