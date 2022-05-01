@@ -26,5 +26,13 @@
     "**/.*/**",
     "**/.vscode",
     "**/.vscode/**"
-  ]
+  ],
+  "files.associations": {
+    "carrito.h": "c",
+    "producto.h": "c",
+    "list.h": "c",
+    "csvread.h": "c",
+    "stdlib.h": "c",
+    "menu.h": "c"
+  }
 }
